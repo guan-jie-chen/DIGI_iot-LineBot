@@ -7,6 +7,7 @@ var express = require('express');
 var myBoardVars={device:'gERLE'};
 
 var interval_DHT=0;
+var buzzer;
 var led;
 var dht;
 var temperatureWarning;
@@ -121,10 +122,37 @@ function sendMessage(eve,msg){
    });
 }
 
+function buzzer_music(m) {
+   var musicNotes = {};
+   musicNotes.notes = [];
+   musicNotes.tempos = [];
+   if (m[0].notes.length > 1) {
+     for (var i = 0; i < m.length; i++) {
+       if (Array.isArray(m[i].notes)) {
+         var cn = musicNotes.notes.concat(m[i].notes);
+         musicNotes.notes = cn;
+       } else {
+         musicNotes.notes.push(m[i].notes);
+       }
+       if (Array.isArray(m[i].tempos)) {
+         var ct = musicNotes.tempos.concat(m[i].tempos);
+         musicNotes.tempos = ct;
+       } else {
+         musicNotes.tempos.push(m[i].tempos);
+       }
+     }
+   } else {
+     musicNotes.notes = [m[0].notes];
+     musicNotes.tempos = [m[0].tempos];
+   }
+   return musicNotes;
+ }
+
  boardReady(myBoardVars, true, function (board) {
     myBoard=board;
     board.systemReset();
     board.samplingInterval = 50;
+    buzzer = getBuzzer(board, 11);
     led = getLed(board, 11);
     led.off();
     dht = getDht(board, 10);
@@ -151,6 +179,7 @@ function maxTemperatureCheck(){
          if (dht.humidity>=maxTemperature){
             myMsg='濕度過高警示，警告濕度為'+maxTemperature+'，現在濕度：'+dht.humidity;
             led.on();
+            buzzer.play(buzzer_music([{ notes : ["C6","D6","E6","F6","G6","A6","B6"] , tempos : ["8","8","8","8","8","8","8"] }]).notes ,buzzer_music([{ notes : ["C6","D6","E6","F6","G6","A6","B6"] , tempos : ["8","8","8","8","8","8","8"] }]).tempos );
             bot.push(userId,myMsg);
          }
       });
