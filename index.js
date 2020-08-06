@@ -152,7 +152,7 @@ function buzzer_music(m) {
     myBoard=board;
     board.systemReset();
     board.samplingInterval = 50;
-    buzzer = getBuzzer(board, 11);
+    buzzer = getBuzzer(board, 6);
     led = getLed(board, 11);
     led.off();
     dht = getDht(board, 10);
