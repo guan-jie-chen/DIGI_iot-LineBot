@@ -7,6 +7,8 @@ var express = require('express');
 var myBoardVars={device:'gERLE'};
 
 var interval_DHT=0;
+var led;
+var dht;
 var temperatureWarning;
 var timeWarnig;
 var interval_DHT_str;
@@ -70,6 +72,7 @@ function processText(eve){
    else if (myMsg==='停止警告'){
             myResult='已停止上限警告';
             clearInterval(temperatureWarning);
+            led.off();
    }
    else if (myMsg==='停止' || myMsg==='stop'){
             myResult='停止回報';
@@ -122,6 +125,8 @@ function sendMessage(eve,msg){
     myBoard=board;
     board.systemReset();
     board.samplingInterval = 50;
+    led = getLed(board, 11);
+    led.off();
     dht = getDht(board, 10);
  });
 
@@ -145,6 +150,7 @@ function maxTemperatureCheck(){
       dht.read().then(function(){
          if (dht.humidity>=maxTemperature){
             myMsg='濕度過高警示，警告濕度為'+maxTemperature+'，現在濕度：'+dht.humidity;
+            led.on();
             bot.push(userId,myMsg);
          }
       });
@@ -158,7 +164,7 @@ function setMaxTemperature(msg){
       maxTemperature=Number(msg);
       bot.push(userId,'警告濕度已設為：'+msg+'%，超過時每'+intervalCheck+'秒警告');
       clearInterval(temperatureWarning);
-      temperatureWarning=setInterval(maxTemperatureCheck,intervalCheck*1000); 
+      temperatureWarning=setInterval(maxTemperatureCheck,intervalCheck*1000);
    }
 }
 //持續偵測
