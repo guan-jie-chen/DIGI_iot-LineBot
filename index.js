@@ -19,11 +19,11 @@ var maxTemperature = 70;
 
 //溫度過高警示，每10秒偵測一次
 var intervalCheck=10;
-var userId = 'U249ef00bd5c03e9040434d7621f8de5c';//your userId
+var userId = '';//your userId
 var bot = linebot({
-  channelId: '1654578471',//your channelId
-  channelSecret: '2a7d8ca053d925f71c909d20a6413d77',//your channelSecret
-  channelAccessToken: 'uK17iT9m7fqGRNZuZgyN0PAaOHWbnDk1rAbbnsMx/4KRf7fk34GAzcIValNaMpl7dRhOUHBiAEO1H2ex82rD9t+NYegfoqfZtKqtiBUh0Tpd2TDc048joEJZextJh5jvdgWaceZL/L8Y00LqoFDc7gdB04t89/1O/w1cDnyilFU='//your channelAccessToken
+  channelId: '',//your channelId
+  channelSecret: '',//your channelSecret
+  channelAccessToken: ''//your channelAccessToken
 });
 
 //這一段的程式是專門處理當有人傳送文字訊息給LineBot時，我們的處理回應
